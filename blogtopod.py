@@ -276,16 +276,16 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(clean_text_for_tts, mo, output_file, script):
-    mo.stop('script' not in globals())
+def _(clean_text_for_tts, mo, output_file, script, run_button):
+    mo.stop(run_button.value and 'script' not in globals() and 'script' not in locals())
     with open(output_file.value.replace(".mp3", "_script.md"), "w") as fw:
         fw.write(clean_text_for_tts(script))
     return (fw,)
 
 
 @app.cell(hide_code=True)
-def _(clean_text_for_tts, mo, script):
-    mo.stop('script' not in globals())
+def _(clean_text_for_tts, mo, script, run_button):
+    mo.stop(run_button.value and 'script' not in globals() and 'script' not in locals())
     print(clean_text_for_tts(script))
     return
 
