@@ -98,7 +98,7 @@ The magic happens via:
 - [contextkit](https://github.com/AnswerDotAI/contextkit) for page extraction
 - Gemini Pro 2.5 for creating a script
 - OpenAI latest TTS APIs for high-quality text-to-speech
-- Some light audio processing with `pydub` (this current requires a Python version **before** 3.13)
+- Some light audio processing with `pydub` (this currently requires a Python version **before** 3.13)
 
 ## Making Code Changes
 
