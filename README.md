@@ -29,7 +29,7 @@ If you prefer using your existing Python environment:
 
 ```bash
 pip install -r requirements.txt
-python blogtopod.py
+marimo edit blogtopod.py
 ```
 
 ## API Keys Required
