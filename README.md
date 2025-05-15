@@ -17,7 +17,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 Then run the application directly:
 
 ```bash
-uv run --python 3.12 https://github.com/shuane/blogtopod/refs/heads/main/blogtopod.py
+uv run --python 3.12 https://raw.githubusercontent.com/shuane/blogtopod/refs/heads/main/blogtopod.py
 ```
 
 The beauty of `uv` is that it handles all dependency management automatically—the requirements are built right into the Python file.

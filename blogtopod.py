@@ -11,7 +11,7 @@
 
 import marimo
 
-__generated_with = "0.13.9"
+__generated_with = "0.11.31"
 app = marimo.App(width="medium")
 
 
@@ -34,6 +34,7 @@ def _():
         Path,
         gp,
         mo,
+        os,
         re,
         read_url,
         unicodedata,
@@ -44,11 +45,11 @@ def _():
 def _(mo):
     mo.md(
         r"""
-    **Note**: This script assumes you have your OPENAI_API_KEY and GEMINI_API_KEY environment variables set
+        **Note**: This script assumes you have your OPENAI_API_KEY and GEMINI_API_KEY environment variables set
 
-    - Gemini is used for making the script
-    - OpenAI is used for the voices
-    """
+        - Gemini is used for making the script
+        - OpenAI is used for the voices
+        """
     )
     return
 
@@ -220,7 +221,7 @@ def _(gp, hosts, mo, parse_podcast_script, prompt, run_button):
     script = chat(prompt).text
     segments = parse_podcast_script(script, hosts[0].value, hosts[1].value)
     len(segments)
-    return script, segments
+    return chat, script, segments
 
 
 @app.cell
@@ -243,7 +244,7 @@ def _(AudioSegment, BytesIO, client, hosts, mo, run_button, segments, voices):
             parts.append(AudioSegment.from_file(buffer, format="mp3"))
 
     len(parts)
-    return (parts,)
+    return buffer, chunk, parts, response, s
 
 
 @app.cell(hide_code=True)
@@ -253,7 +254,8 @@ def _(mo):
 
 
 @app.cell
-def _(AudioSegment, parts):
+def _(AudioSegment, mo, parts, run_button):
+    mo.stop(not run_button.value)
     preview = sum(parts, AudioSegment.empty())
     preview
     return (preview,)
@@ -276,7 +278,7 @@ def _(mo):
 def _(clean_text_for_tts, output_file, script):
     with open(output_file.value.replace(".mp3", "_script.md"), "w") as fw:
         fw.write(clean_text_for_tts(script))
-    return
+    return (fw,)
 
 
 @app.cell(hide_code=True)
