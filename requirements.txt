@@ -1,0 +1,5 @@
+marimo
+gaspare>=0.3.3
+openai>=1.78.1",
+pydub>=0.25.1
+contextkit>=0.0.6
