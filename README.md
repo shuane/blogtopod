@@ -17,8 +17,9 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 Then run the application directly:
 
 ```bash
-uv run --python 3.12 https://raw.githubusercontent.com/shuane/blogtopod/refs/heads/main/blogtopod.py
+uvx marimo run --sandbox https://raw.githubusercontent.com/shuane/blogtopod/refs/heads/main/blogtopod.py
 ```
+If you are prompted to run in docker, it is probably better to select 'n' so that it will run directly in your current folder.
 
 The beauty of `uv` is that it handles all dependency management automatically—the requirements are built right into the Python file.
 
