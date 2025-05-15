@@ -83,7 +83,7 @@ Mostly this was an exercise to see how quickly I could build something to do thi
 python blogtopod.py 
 ```
 
-1. In the browswer window that opens, set some values - e.g.
+1. In the browser window that opens, set some values - e.g.
 
 Input URL:  https://example.com/great-article
 Output file: great_article.mp3
