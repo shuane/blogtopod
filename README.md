@@ -74,7 +74,7 @@ Perfect for:
 
 ## Why I built this
 
-Sometimes I want to consume interesting articles but don't have time to sit and read. This lets me turn any blog post into something I can listen to while doing chores. The AI voices are nowgood enough that it's actually pleasant to listen to!
+Mostly this was an exercise to see how quickly I could build something to do this.. I was inspired by a fellow "Solve It with Code" student who had built something similar using Google's Gemini and text-to-speech libraries. The sample blog post is from another fellow student (waving to Pol).
 
 ## Example usage
 

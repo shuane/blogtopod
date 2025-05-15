@@ -60,14 +60,13 @@ def _(OpenAI):
     return (client,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     input_url = mo.ui.text(label="URL", value="https://medium.com/@pol.avec/ai-is-the-new-ui-generative-ui-with-fasthtml-e8cfcc98e5b5", full_width=True)
     output_file = mo.ui.text(label="Output file", value="pol_pod.mp3", full_width=True)
     hosts = [mo.ui.text(label="First host", value="Alex"), mo.ui.text(label="Second host", value="Jamie")]
     voices = [mo.ui.text(label="First voice", value="fable"), mo.ui.text(label="Second voice", value="shimmer")]
-
-
+    approximate_length = mo.ui.slider(label="Approximate length (minutes)", start=3, stop=60, step=1, value=25, show_value=True)
     run_button = mo.ui.run_button(label="Run!")
 
     mo.md(f"""
@@ -79,11 +78,20 @@ def _(mo):
 
     {hosts[1]} {voices[1]}
 
+    {approximate_length}
+
     Note that you can find/test voices at https://www.openai.fm/
 
     {run_button}
     """)
-    return hosts, input_url, output_file, run_button, voices
+    return (
+        approximate_length,
+        hosts,
+        input_url,
+        output_file,
+        run_button,
+        voices,
+    )
 
 
 @app.cell(hide_code=True)
@@ -149,25 +157,17 @@ def _(re, unicodedata):
     return clean_text_for_tts, parse_podcast_script
 
 
-@app.cell
-def _():
-    # with open("/home/dum/Code/pol_post.md", "r") as fr:
-    #     post = fr.read()
-
-    # segments = parse_podcast_script(script, hosts[0].value, hosts[1].value)
-    # len(segments)
-    return
-
-
-@app.cell
-def _(input_url, read_url):
+@app.cell(hide_code=True)
+def _(input_url, mo, read_url, run_button):
+    mo.stop(not run_button.value)
     page = read_url(input_url.value)
     print(page)
     return (page,)
 
 
 @app.cell
-def _(hosts, page):
+def _(approximate_length, hosts, mo, page, run_button):
+    mo.stop(not run_button.value)
     prompt = f"""
     Please transform the following source material into an engaging podcast script with two hosts named {hosts[0].value} and {hosts[1].value}. 
 
@@ -197,7 +197,7 @@ def _(hosts, page):
        - Include 2-3 moments of genuine interaction (friendly disagreement, humor, or surprise)
        - Vary sentence structures and pacing to maintain listener interest
 
-    5. Keep the total length to approximately 25 minutes of speaking time.
+    5. Keep the total length to approximately {approximate_length.value} minutes of speaking time.
 
     6. Please format the output with consistent speaker labels that can be easily parsed:
 
@@ -276,7 +276,14 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(clean_text_for_tts, mo, output_file, run_button, script):
+def _(
+    MarimoMissingRefError,
+    clean_text_for_tts,
+    mo,
+    output_file,
+    run_button,
+    script,
+):
     mo.stop(not run_button.value)
     try:
         with open(output_file.value.replace(".mp3", "_script.md"), "w") as fw:
@@ -285,12 +292,11 @@ def _(clean_text_for_tts, mo, output_file, run_button, script):
         pass
     except MarimoMissingRefError:
         pass
-
     return (fw,)
 
 
 @app.cell(hide_code=True)
-def _(clean_text_for_tts, mo, run_button, script):
+def _(MarimoMissingRefError, clean_text_for_tts, mo, run_button, script):
     mo.stop(not run_button.value)
     try:
         print(clean_text_for_tts(script))
@@ -298,7 +304,6 @@ def _(clean_text_for_tts, mo, run_button, script):
         pass
     except MarimoMissingRefError:
         pass
-
     return
 
 
