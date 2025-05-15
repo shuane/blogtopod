@@ -262,7 +262,7 @@ def _(AudioSegment, mo, parts, run_button):
 
 
 @app.cell(hide_code=True)
-def _(Path, output_file, preview):
+def _(Path, mo, output_file, preview, run_button):
     mo.stop(not run_button.value)
     preview.export(Path(output_file.value))
     print(f"Wrote to {output_file.value}")
@@ -276,14 +276,16 @@ def _(mo):
 
 
 @app.cell(hide_code=True)
-def _(clean_text_for_tts, output_file, script):
+def _(clean_text_for_tts, mo, output_file, script):
+    mo.stop('script' not in globals())
     with open(output_file.value.replace(".mp3", "_script.md"), "w") as fw:
         fw.write(clean_text_for_tts(script))
     return (fw,)
 
 
 @app.cell(hide_code=True)
-def _(clean_text_for_tts, script):
+def _(clean_text_for_tts, mo, script):
+    mo.stop('script' not in globals())
     print(clean_text_for_tts(script))
     return
 
