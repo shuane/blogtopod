@@ -283,6 +283,9 @@ def _(clean_text_for_tts, mo, output_file, run_button, script):
             fw.write(clean_text_for_tts(script))
     except NameError:
         pass
+    except MarimoMissingRefError:
+        pass
+
     return (fw,)
 
 
@@ -292,6 +295,8 @@ def _(clean_text_for_tts, mo, run_button, script):
     try:
         print(clean_text_for_tts(script))
     except NameError:
+        pass
+    except MarimoMissingRefError:
         pass
 
     return
