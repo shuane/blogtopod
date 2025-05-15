@@ -253,7 +253,7 @@ def _(mo):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(AudioSegment, mo, parts, run_button):
     mo.stop(not run_button.value)
     preview = sum(parts, AudioSegment.empty())
@@ -261,8 +261,9 @@ def _(AudioSegment, mo, parts, run_button):
     return (preview,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(Path, output_file, preview):
+    mo.stop(not run_button.value)
     preview.export(Path(output_file.value))
     print(f"Wrote to {output_file.value}")
     return
