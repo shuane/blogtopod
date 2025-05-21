@@ -55,7 +55,9 @@ def _(mo):
 
 
 @app.cell
-def _(OpenAI):
+def _(OpenAI, os):
+    assert os.environ.get("OPENAI_API_KEY"), "You need to define OPENAI_API_KEY in your environment before starting this script"
+    assert os.environ.get("GEMINI_API_KEY"), "You need to define GEMINI_API_KEY in your environment before starting this script"
     client = OpenAI()
     return (client,)
 
