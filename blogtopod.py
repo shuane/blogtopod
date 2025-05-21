@@ -174,13 +174,13 @@ def _(approximate_length, hosts, mo, page, run_button):
     Please transform the following source material into an engaging podcast script with two hosts named {hosts[0].value} and {hosts[1].value}. 
 
     SOURCE MATERIAL:
-    ----
+    <source-material>
     {page}
-    ----
+    </source-material>
 
 
     INSTRUCTIONS:
-    ----
+    <instructions>
     1. Format the output as a ready-to-record script with clear speaker labels.
     2. Create distinct personalities for each host:
        - {hosts[0].value}: Enthusiastic, curious, asks clarifying questions, brings energy
@@ -210,6 +210,7 @@ def _(approximate_length, hosts, mo, page, run_button):
     Use exactly this format with the name in all caps followed by a colon, then the complete text for that turn. Always start each speaker's part on a new line.
 
     7. The final script should read like an authentic conversation while effectively communicating all the key information from the source material.
+    </instructions>
 
     """
     return (prompt,)
@@ -222,17 +223,17 @@ def _(gp, hosts, mo, parse_podcast_script, prompt, run_button):
     chat = gp.Chat(model="gemini-2.5-pro-preview-03-25")
     script = chat(prompt).text
     segments = parse_podcast_script(script, hosts[0].value, hosts[1].value)
-    len(segments)
+    print("Number of audio segments to create:", len(segments))
     return chat, script, segments
 
 
 @app.cell
 def _(AudioSegment, BytesIO, client, hosts, mo, run_button, segments, voices):
-    # Gather voice segments if Run~ button has been clicked
+    # Gather voice segments if Run! button has been clicked
     mo.stop(not run_button.value)
 
     parts = []
-    for s in segments:
+    for s in mo.status.progress_bar(segments, title="Audio segments"):
         with client.audio.speech.with_streaming_response.create(
             model="gpt-4o-mini-tts",
             voice=voices[0].value if s['speaker'] == hosts[0].value.upper() else voices[1].value,
@@ -245,7 +246,7 @@ def _(AudioSegment, BytesIO, client, hosts, mo, run_button, segments, voices):
             buffer.seek(0)
             parts.append(AudioSegment.from_file(buffer, format="mp3"))
 
-    len(parts)
+    print("Number of audio segments created:", len(parts))
     return buffer, chunk, parts, response, s
 
 
@@ -267,7 +268,7 @@ def _(AudioSegment, mo, parts, run_button):
 def _(Path, mo, output_file, preview, run_button):
     mo.stop(not run_button.value)
     preview.export(Path(output_file.value))
-    print(f"Wrote to {output_file.value}")
+    mo.md(f"Wrote to {output_file.value}")
     return
 
 
@@ -301,7 +302,7 @@ def _(
 def _(MarimoMissingRefError, clean_text_for_tts, mo, run_button, script):
     mo.stop(not run_button.value)
     try:
-        print(clean_text_for_tts(script))
+        mo.md(clean_text_for_tts(script))
     except NameError:
         pass
     except MarimoMissingRefError:
